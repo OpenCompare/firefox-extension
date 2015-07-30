@@ -5,5 +5,8 @@
   "description": "An add-on te raplce tables by OpenCompare editor",
   "author": "",
   "license": "MPL 2.0",
-  "version": "0.1"
+  "version": "0.1",
+  "permissions": {
+    "cross-domain-content": ["http://opencompare.org/", "http://localhost:9000/"]
+  }
 }
