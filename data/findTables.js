@@ -38,7 +38,7 @@ function sendTable(id) {
     req.onreadystatechange=function(){
         if (req.readyState==4 && req.status==200){
             var editor = '<iframe src="http://localhost:9000/embedPCM/' + req.responseText + '?enableEdit=false&enableExport=false&enableTitle=false&enableShare=false&deleteAfterLoaded=true" ' +
-                'scrolling="no"  width="100%" height="600px" style="border:none;"></iframe>';
+                'scrolling="auto"  width="100%" height="600px" style="border:none;"></iframe>';
 
             tables.eq(id).replaceWith(editor);
         }
