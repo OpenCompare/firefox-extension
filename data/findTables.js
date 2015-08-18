@@ -32,12 +32,12 @@ function sendTable(id) {
     fd.append('title', 'Test');
     fd.append('productAsLines', true);
     var req = new XMLHttpRequest();
-    req.open("POST", "http://localhost:9000/api/embedFromHtml");
+    req.open("POST", "http://opencompare.org/api/embedFromHtml");
     req.send(fd);
 
     req.onreadystatechange=function(){
         if (req.readyState==4 && req.status==200){
-            var editor = '<iframe src="http://localhost:9000/embedPCM/' + req.responseText + '?enableEdit=false&enableExport=false&enableTitle=false&enableShare=false&deleteAfterLoaded=true" ' +
+            var editor = '<iframe src="http://opencompare.org/embedPCM/' + req.responseText + '?enableEdit=false&enableExport=false&enableTitle=false&enableShare=true&deleteAfterLoaded=true" ' +
                 'scrolling="auto"  width="100%" height="600px" style="border:none;"></iframe>';
 
             tables.eq(id).replaceWith(editor);
