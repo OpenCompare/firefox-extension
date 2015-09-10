@@ -1,9 +1,14 @@
-var self = require('sdk/self');
+var data = require("sdk/self").data;
+var self = require("sdk/self");
 
-// a dummy function, to show how tests work.
-// to see how to test this function, look at test/test-index.js
-function dummy(text, callback) {
-  callback(text);
-}
 
-exports.dummy = dummy;
+require("sdk/ui/button/action").ActionButton({
+  id: "opencompare-extension",
+  label: "OpenCompare extension",
+  icon: "./icon.png",
+  onClick: function() {
+    worker = require("sdk/tabs").activeTab.attach({
+      contentScriptFile: [data.url("jquery-2.1.4.min.js"), data.url('findTables.js')]
+    });
+  }
+});
