@@ -1,12 +1,13 @@
 {
-  "name": "opencompare",
   "title": "OpenCompare",
-  "id": "jid1-LVGCnH4gMBqvpA",
-  "description": "An add-on te raplce tables by OpenCompare editor",
-  "author": "",
-  "license": "MPL 2.0",
-  "version": "0.1",
-  "permissions": {
-    "cross-domain-content": ["http://opencompare.org/", "http://localhost:9000/"]
-  }
+  "name": "opencompare",
+  "version": "0.0.0",
+  "description": "An add-on to replace any tables by OpenCompare Editor",
+  "main": "index.js",
+  "author": "hvallee",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT"
 }
