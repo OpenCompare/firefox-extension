@@ -1,20 +1,21 @@
-var tables =$("table");
+var tables = document.getElementsByTagName("table");
 var ocServer = "opencompare.org";
 //var ocServer = "localhost:9000";
 
     for(var index = 0; index < tables.length; index++) {
         var table = tables[index];
 
+        /* Replace table button */
         var button = document.createElement("button");
-        button.setAttribute("class", "waves-effect waves-light btn");
-        button.setAttribute("style", "margin-top: 10px");
-        button.setAttribute("id", index.toString());
+        button.class = "waves-effect waves-light btn";
+        button.style = "margin-top: 10px";
+        button.id = index.toString();
         button.setAttribute("data-type", 'OpenCompareButton');
 
         button.addEventListener('click', function(event) {
 
             id = event.target.getAttribute("id");
-            $('#'+id).hide();
+            document.getElementById(id).style.display = 'none';
             sendTable(event.target.getAttribute("id"));
        });
         var buttonContent = document.createTextNode("Replace this table");
@@ -26,9 +27,9 @@ var ocServer = "opencompare.org";
 
         var button2 = document.createElement("button");
 
-        button2.setAttribute("class", "waves-effect waves-light btn");
-        button2.setAttribute("style", "margin-top: 10px");
-        button2.setAttribute("id", index.toString());
+        button2.class = "waves-effect waves-light btn";
+        button2.style = "margin-top: 10px";
+        button2.id = index.toString();
         button2.setAttribute("data-type", 'OpenCompareButton');
 
         button2.addEventListener('click', function(event) {
@@ -57,10 +58,14 @@ function sendTable(id) {
 
     req.onreadystatechange=function(){
         if (req.readyState==4 && req.status==200){
-            var editor = '<iframe src="http://opencompare.org/embedPCM/' + req.responseText + '?enableEdit=false&enableExport=false&enableTitle=false&enableShare=true&deleteAfterLoaded=true" ' +
-                'scrolling="auto"  width="100%" height="600px" style="border:none;"></iframe>';
-
-            tables.eq(id).replaceWith(editor);
+            var ocIframe = document.createElement("iframe");
+            ocIframe.src = "http://opencompare.org/embedPCM/" + req.responseText + "?enableEdit=false&enableExport=false&enableTitle=false&enableShare=true&deleteAfterLoaded=true";
+            ocIframe.scrolling = "auto";
+            ocIframe.width = "100%";
+            ocIframe.height = "600px";
+            ocIframe.style = "border:none;";
+            var table = tables[id];
+            table.parentNode.replaceChild(ocIframe, table);
         }
     };
 }

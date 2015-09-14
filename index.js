@@ -8,7 +8,7 @@ require("sdk/ui/button/action").ActionButton({
   icon: "./icon.png",
   onClick: function() {
     worker = require("sdk/tabs").activeTab.attach({
-      contentScriptFile: [data.url("jquery-2.1.4.min.js"), data.url('findTables.js')]
+      contentScriptFile: [data.url('findTables.js')]
     });
   }
 });
