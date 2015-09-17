@@ -8,20 +8,35 @@
 </head>
 <body>
 <div style="width: 250px" class="container">
-    <div class="col s8 offset-s2">
-        <img class="logo" src="logo.svg">
-        <h5 class="title"> OpenCompare</h5>
-        <h6 class="subtitle"> Your favorite comparator</h6>
-        <button id="checkPage" class="waves-effect waves-light btn">Find tables to replace</button>
-        <button id="uncheckPage" class="waves-effect waves-light btn red" style="display: none">Stop replacing</button>
-        <div id="message" class="logo" style="display: none;">
-            <div class="card-panel teal">
+    <div class="row">
+            <img class="logo" src="logo.svg">
+            <h5 class="title"> OpenCompare</h5>
+            <h6 class="subtitle"> Your favorite comparator</h6>
+            <button id="checkPage" class="waves-effect waves-light btn">Find tables to replace</button>
+            <button id="uncheckPage" class="waves-effect waves-light btn red" style="display: none">Stop replacing</button>
+            <div id="message" class="logo" style="display: none;">
+                <div class="card-panel teal">
                  <span class="white-text" style="font-size:1.5em">
                      This website uses https, a secure protocol. To use OpenCompare, you have to authorized it by clicking
                      on the shield <img src="shield.png">, in the right of the address bar, and choose "Load unsafe scripts".
                  </span>
+                </div>
+                <button id="gotIt" style="float: right" class="btn">Got it !</button>
             </div>
-            <button id="gotIt" style="float: right" class="btn">Got it !</button>
+
+
+    </div>
+
+
+    <div class="row">
+        <div class="card teal">
+            <div class="card-content white-text">
+                <span class="card-title">Disclaimer</span>
+                <p>
+                    This extension is not working on website secured with HTTPS protocol.
+                    We are working on it!
+                </p>
+            </div>
         </div>
 
     </div>

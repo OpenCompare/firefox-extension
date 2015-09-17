@@ -93,7 +93,7 @@
 
         req.onreadystatechange=function(){
             if (req.readyState==4 && req.status==200){
-                window.open('http://' + ocServer + '/pcm/' + req.responseText + '?deleteAfterLoaded=true', '_blank');
+                self.port.emit("openTable", req.responseText);
             }
         };
     }

@@ -36,9 +36,15 @@
          worker = tabs.activeTab.attach({
             contentScriptFile: [data.url('findTables.js')]
         });
+
+        worker.port.on("openTable", function(id) {
+            tabs.open('http://opencompare.org/pcm/' + id + '?deleteAfterLoaded=true', '_blank');
+        });
     });
 
     panel.port.on("removeButtons", function() {
         worker.port.emit("removeButtons");
     });
+
+
 })();
