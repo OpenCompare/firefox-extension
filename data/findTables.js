@@ -1,5 +1,6 @@
-var tables = document.getElementsByTagName("table");
-var ocServer = "opencompare.org";
+(function() {
+    var tables = document.getElementsByTagName("table");
+    var ocServer = "opencompare.org";
 //var ocServer = "localhost:9000";
 
     for(var index = 0; index < tables.length; index++) {
@@ -17,7 +18,7 @@ var ocServer = "opencompare.org";
             id = event.target.getAttribute("id");
             document.getElementById(id).style.display = 'none';
             sendTable(event.target.getAttribute("id"));
-       });
+        });
         var buttonContent = document.createTextNode("Replace this table");
         button.appendChild(buttonContent);
         var parentDiv = tables[index].parentNode;
@@ -44,47 +45,57 @@ var ocServer = "opencompare.org";
 
     }
 
-function sendTable(id) {
+    function sendTable(id) {
 
-    var fd = new FormData();
+        var fd = new FormData();
 
-    var blob = new Blob([tables[id].outerHTML], {type: "text/html"});
-    fd.append("file", blob);
-    fd.append('title', 'Test');
-    fd.append('productAsLines', true);
-    var req = new XMLHttpRequest();
-    req.open("POST", "http://opencompare.org/api/embedFromHtml");
-    req.send(fd);
+        var blob = new Blob([tables[id].outerHTML], {type: "text/html"});
+        fd.append("file", blob);
+        fd.append('title', 'Test');
+        fd.append('productAsLines', true);
+        var req = new XMLHttpRequest();
+        req.open("POST", "http://opencompare.org/api/embedFromHtml");
+        req.send(fd);
 
-    req.onreadystatechange=function(){
-        if (req.readyState==4 && req.status==200){
-            var ocIframe = document.createElement("iframe");
-            ocIframe.src = "http://opencompare.org/embedPCM/" + req.responseText + "?enableEdit=false&enableExport=false&enableTitle=false&enableShare=true&deleteAfterLoaded=true";
-            ocIframe.scrolling = "auto";
-            ocIframe.width = "100%";
-            ocIframe.height = "600px";
-            ocIframe.style = "border:none;";
-            var table = tables[id];
-            table.parentNode.replaceChild(ocIframe, table);
-        }
-    };
-}
+        req.onreadystatechange=function(){
+            if (req.readyState==4 && req.status==200){
+                var ocIframe = document.createElement("iframe");
+                ocIframe.setAttribute("type", "content");
+                ocIframe.src = "http://opencompare.org/embedPCM/" + req.responseText + "?enableEdit=false&enableExport=false&enableTitle=false&enableShare=true&deleteAfterLoaded=true";
+                ocIframe.scrolling = "auto";
+                ocIframe.width = "100%";
 
-function openTable(id) {
+                var originalheight = tables[id].offsetHeight;
+                if(originalheight < 300) {
+                    ocIframe.height = "300px";
+                } else {
+                    ocIframe.height = originalheight;
+                }
 
-    var fd = new FormData();
+                ocIframe.style = "border:none;";
+                var table = tables[id];
+                table.parentNode.replaceChild(ocIframe, table);
+            }
+        };
+    }
 
-    var blob = new Blob([tables[id].outerHTML], {type: "text/html"});
-    fd.append("file", blob);
-    fd.append('title', 'Test');
-    fd.append('productAsLines', true);
-    var req = new XMLHttpRequest();
-    req.open("POST", "http://opencompare.org/api/embedFromHtml");
-    req.send(fd);
+    function openTable(id) {
 
-    req.onreadystatechange=function(){
-        if (req.readyState==4 && req.status==200){
-            window.open('http://' + ocServer + '/pcm/' + req.responseText + '?deleteAfterLoaded=true', '_blank');
-        }
-    };
-}
+        var fd = new FormData();
+
+        var blob = new Blob([tables[id].outerHTML], {type: "text/html"});
+        fd.append("file", blob);
+        fd.append('title', 'Test');
+        fd.append('productAsLines', true);
+        var req = new XMLHttpRequest();
+        req.open("POST", "http://opencompare.org/api/embedFromHtml");
+        req.send(fd);
+
+        req.onreadystatechange=function(){
+            if (req.readyState==4 && req.status==200){
+                window.open('http://' + ocServer + '/pcm/' + req.responseText + '?deleteAfterLoaded=true', '_blank');
+            }
+        };
+    }
+
+})();
