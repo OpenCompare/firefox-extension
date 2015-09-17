@@ -13,6 +13,7 @@
 
     var panel = panels.Panel({
         contentURL: data.url("panel.html"),
+        contentScriptFile: data.url("panel.js"),
         onHide: handleHide
     });
 
