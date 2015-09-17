@@ -3,6 +3,8 @@
 
     var data = require("sdk/self").data;
     var panels = require("sdk/panel");
+    var tabs = require("sdk/tabs");
+    var worker;
 
     var button = require("sdk/ui/button/toggle").ToggleButton({
         id: "opencompare-extension",
@@ -24,12 +26,19 @@
             });
         }
 
-        require("sdk/tabs").activeTab.attach({
-            contentScriptFile: [data.url('findTables.js')]
-        });
     }
 
     function handleHide() {
         button.state('window', {checked: false});
     }
+
+    panel.port.on("checkPage", function() {
+         worker = tabs.activeTab.attach({
+            contentScriptFile: [data.url('findTables.js')]
+        });
+    });
+
+    panel.port.on("removeButtons", function() {
+        worker.port.emit("removeButtons");
+    });
 })();

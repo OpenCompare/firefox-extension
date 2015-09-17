@@ -98,4 +98,16 @@
         };
     }
 
+    self.port.on("removeButtons", function() {
+        var buttons = document.querySelectorAll("button[data-type='OpenCompareButton'");
+        var index;
+        var button;
+        for (index = 0; index < buttons.length; index++) {
+            button = buttons[index];
+            button.parentNode.removeChild(button);
+        }
+
+    });
+
+
 })();
