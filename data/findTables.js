@@ -1,7 +1,7 @@
 (function() {
     var tables = document.getElementsByTagName("table");
-    var ocServer = "opencompare.org";
-//var ocServer = "localhost:9000";
+    //var ocServer = "opencompare.org";
+var ocServer = "localhost:9000";
 
     for(var index = 0; index < tables.length; index++) {
         var table = tables[index];
@@ -47,36 +47,59 @@
 
     function sendTable(id) {
 
-        var fd = new FormData();
+        console.log("sending table");
 
-        var blob = new Blob([tables[id].outerHTML], {type: "text/html"});
-        fd.append("file", blob);
-        fd.append('title', 'Test');
-        fd.append('productAsLines', true);
-        var req = new XMLHttpRequest();
-        req.open("POST", "http://opencompare.org/api/embedFromHtml");
-        req.send(fd);
+        var table = tables[id];
 
-        req.onreadystatechange=function(){
-            if (req.readyState==4 && req.status==200){
-                var ocIframe = document.createElement("iframe");
-                ocIframe.setAttribute("type", "content");
-                ocIframe.src = "http://opencompare.org/embedPCM/" + req.responseText + "?enableEdit=false&enableExport=false&enableTitle=false&enableShare=true&deleteAfterLoaded=true";
-                ocIframe.scrolling = "auto";
-                ocIframe.width = "100%";
+        // Create form
+        var form = document.createElement("form");
+        form.target = "ocIframe";
+        form.action = "http://" + ocServer + "/embed/html";
+        form.method = "post";
+        table.parentNode.appendChild(form);
 
-                var originalheight = tables[id].offsetHeight;
-                if(originalheight < 300) {
-                    ocIframe.height = "300px";
-                } else {
-                    ocIframe.height = originalheight;
-                }
+        // Set values in form
+        var inputTitle = document.createElement("input");
+        inputTitle.type = "hidden";
+        inputTitle.name = "title";
+        inputTitle.value = "test";
+        form.appendChild(inputTitle);
 
-                ocIframe.style = "border:none;";
-                var table = tables[id];
-                table.parentNode.replaceChild(ocIframe, table);
-            }
-        };
+        var inputProductAsLines = document.createElement("input");
+        inputProductAsLines.type = "hidden";
+        inputProductAsLines.name = "productAsLines";
+        inputProductAsLines.value = "true";
+        form.appendChild(inputProductAsLines);
+
+        var inputContent = document.createElement("input");
+        inputContent.type = "hidden";
+        inputContent.name = "content";
+        inputContent.value = table.outerHTML;
+        form.appendChild(inputContent);
+
+        // Create iframe
+        var ocIframe = document.createElement("iframe");
+        ocIframe.name = "ocIframe";
+        ocIframe.setAttribute("type", "content");
+        ocIframe.scrolling = "auto";
+        ocIframe.width = "100%";
+
+        var originalheight = tables[id].offsetHeight;
+        if(originalheight < 300) {
+            ocIframe.height = "300px";
+        } else {
+            ocIframe.height = originalheight;
+        }
+
+        ocIframe.style = "border:none;";
+
+        // Replace table by iframe
+        table.parentNode.replaceChild(ocIframe, table);
+
+        form.submit();
+
+        table.parentNode.removeChild(form);
+
     }
 
     function openTable(id) {
