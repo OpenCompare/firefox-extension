@@ -56,10 +56,6 @@
 
         workers[tab.id] = worker;
 
-        worker.port.on("openTable", function(id) {
-            tabs.open('http://opencompare.org/pcm/' + id + '?deleteAfterLoaded=true', '_blank'); // FIXME : not working anymore
-        });
-
         worker.port.on("status", function(status) {
             panel.port.emit("status", status);
         });

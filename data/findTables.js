@@ -54,35 +54,43 @@
     });
 
 
-
-    function sendTable(id) {
-        var table = tables[id];
-
-        // Create form
+    function createForm(table, appendToPage) {
         var form = document.createElement("form");
-        form.target = "ocIframe";
-        form.action = "http://" + ocServer + "/embed/html";
         form.method = "post";
-        table.parentNode.appendChild(form);
 
         // Set values in form
         var inputTitle = document.createElement("input");
         inputTitle.type = "hidden";
         inputTitle.name = "title";
         inputTitle.value = "test";
-        form.appendChild(inputTitle);
 
         var inputProductAsLines = document.createElement("input");
         inputProductAsLines.type = "hidden";
         inputProductAsLines.name = "productAsLines";
         inputProductAsLines.value = "true";
-        form.appendChild(inputProductAsLines);
 
         var inputContent = document.createElement("input");
         inputContent.type = "hidden";
         inputContent.name = "content";
         inputContent.value = table.outerHTML;
+
+        // Add form to page
+        table.parentNode.appendChild(form);
+        form.appendChild(inputTitle);
+        form.appendChild(inputProductAsLines);
         form.appendChild(inputContent);
+
+        return form;
+    }
+
+
+    function sendTable(id) {
+        var table = tables[id];
+
+        // Create form
+        var form = createForm(table);
+        form.target = "ocIframe";
+        form.action = "http://" + ocServer + "/embed/html";
 
         // Create iframe
         var ocIframe = document.createElement("iframe");
@@ -109,22 +117,12 @@
     }
 
     function openTable(id) {
-
-        var fd = new FormData();
-
-        var blob = new Blob([tables[id].outerHTML], {type: "text/html"});
-        fd.append("file", blob);
-        fd.append('title', 'Test');
-        fd.append('productAsLines', true);
-        var req = new XMLHttpRequest();
-        req.open("POST", "http://opencompare.org/api/embedFromHtml"); // FIXME : not working anymore
-        req.send(fd);
-
-        req.onreadystatechange=function(){
-            if (req.readyState==4 && req.status==200){
-                self.port.emit("openTable", req.responseText);
-            }
-        };
+        var table = tables[id];
+        var form = createForm(table);
+        form.target = "_blank";
+        form.action = "http://" + ocServer + "/embed/html";
+        form.submit();
+        table.parentNode.removeChild(form);
     }
 
     self.port.on("removeButtons", function() {
