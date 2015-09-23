@@ -1,15 +1,15 @@
 {
   "title": "OpenCompare",
   "name": "opencompare",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "An add-on to replace any tables by OpenCompare Editor",
   "main": "index.js",
   "author": "hvallee",
   "engines": {
-    "firefox": ">=38.0a1",
-    "fennec": ">=38.0a1"
+    "firefox": ">=35.0",
+    "fennec": ">=35.0"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "permissions": {
     "cross-domain-content": ["http://opencompare.org/", "http://localhost:9000/"]
   }
