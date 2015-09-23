@@ -88,7 +88,7 @@
         // Create form
         var form = createForm(table);
         form.target = "ocIframe";
-        form.action = "http://" + ocServer + "/embed/html";
+        form.action = "http://" + ocServer + "/api/import/html?format='embed'";
 
         // Create iframe
         var ocIframe = document.createElement("iframe");
@@ -118,7 +118,7 @@
         var table = tables[id];
         var form = createForm(table);
         form.target = "_blank";
-        form.action = "http://" + ocServer + "/embed/html";
+        form.action = "http://" + ocServer + "/api/import/html?format='page'";
         form.submit();
         table.parentNode.removeChild(form);
     }
