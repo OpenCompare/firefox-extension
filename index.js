@@ -5,7 +5,7 @@
     var panels = require("sdk/panel");
     var tabs = require("sdk/tabs");
 
-    var workers = {};
+    var tabsData = {};
 
     var button = require("sdk/ui/button/toggle").ToggleButton({
         id: "opencompare-extension",
@@ -21,21 +21,29 @@
     });
 
     panel.port.on("checkPage", function() {
-        var worker = workers[tabs.activeTab.id];
-        worker.port.emit("addButtons");
+        var tabData = tabsData[tabs.activeTab.id];
+        if (typeof tabData !== 'undefined') {
+            tabData.worker.port.emit("addButtons");
+            tabData.isEnabled = true;
+        }
     });
 
 
     panel.port.on("removeButtons", function() {
-        var worker = workers[tabs.activeTab.id];
-        worker.port.emit("removeButtons");
+        var tabData = tabsData[tabs.activeTab.id];
+        if (typeof tabData !== 'undefined') {
+            tabData.worker.port.emit("removeButtons");
+            tabData.isEnabled = false;
+        }
     });
 
     function handleChange(state) {
         if (state.checked) {
             // Get status of content script
-            var worker = workers[tabs.activeTab.id];
-            worker.port.emit("getStatus");
+            var tabData = tabsData[tabs.activeTab.id];
+            if (typeof tabData !== 'undefined') {
+                panel.port.emit("status", tabData.isEnabled);
+            }
 
             // Display panel
             panel.show({
@@ -54,11 +62,11 @@
             contentScriptFile: [data.url('findTables.js')]
         });
 
-        workers[tab.id] = worker;
+        tabsData[tab.id] = {
+            worker: worker,
+            isEnabled: false
+        };
 
-        worker.port.on("status", function(status) {
-            panel.port.emit("status", status);
-        });
     });
 
 

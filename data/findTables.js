@@ -2,7 +2,6 @@
 
     //var ocServer = "opencompare.org";
     var ocServer = "localhost:9000";
-    var buttonsAdded = false;
     var tables;
 
     self.port.on("addButtons", function () {
@@ -50,7 +49,6 @@
 
         }
 
-        buttonsAdded = true;
     });
 
 
@@ -134,11 +132,6 @@
             button.parentNode.removeChild(button);
         }
 
-        buttonsAdded = false;
-    });
-
-    self.port.on("getStatus", function() {
-       self.port.emit("status", buttonsAdded);
     });
 
 
