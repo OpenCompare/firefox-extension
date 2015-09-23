@@ -1,7 +1,7 @@
 (function() {
 
-    //var ocServer = "opencompare.org";
-    var ocServer = "localhost:9000";
+    var ocServer = "opencompare.org";
+    //var ocServer = "localhost:9000";
     var tables;
 
     self.port.on("addButtons", function () {
