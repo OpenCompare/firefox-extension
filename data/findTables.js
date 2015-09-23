@@ -1,54 +1,61 @@
 (function() {
-    var tables = document.getElementsByTagName("table");
+
     //var ocServer = "opencompare.org";
-var ocServer = "localhost:9000";
+    var ocServer = "localhost:9000";
+    var buttonsAdded = false;
+    var tables;
 
-    for(var index = 0; index < tables.length; index++) {
-        var table = tables[index];
+    self.port.on("addButtons", function () {
+        tables = document.getElementsByTagName("table");
 
-        /* Replace table button */
-        var button = document.createElement("button");
-        button.class = "waves-effect waves-light btn";
-        button.style = "margin-top: 10px";
-        button.id = index.toString();
-        button.setAttribute("data-type", 'OpenCompareButton');
+        for(var index = 0; index < tables.length; index++) {
+            var table = tables[index];
 
-        button.addEventListener('click', function(event) {
+            /* Replace table button */
+            var button = document.createElement("button");
+            button.class = "waves-effect waves-light btn";
+            button.style = "margin-top: 10px";
+            button.id = index.toString();
+            button.setAttribute("data-type", 'OpenCompareButton');
 
-            id = event.target.getAttribute("id");
-            document.getElementById(id).style.display = 'none';
-            sendTable(event.target.getAttribute("id"));
-        });
-        var buttonContent = document.createTextNode("Replace this table");
-        button.appendChild(buttonContent);
-        var parentDiv = tables[index].parentNode;
-        parentDiv.insertBefore(button, tables[index]);
+            button.addEventListener('click', function(event) {
 
-        /* Open in OpenCompare button */
+                id = event.target.getAttribute("id");
+                document.getElementById(id).style.display = 'none';
+                sendTable(event.target.getAttribute("id"));
+            });
+            var buttonContent = document.createTextNode("Replace this table");
+            button.appendChild(buttonContent);
+            var parentDiv = tables[index].parentNode;
+            parentDiv.insertBefore(button, tables[index]);
 
-        var button2 = document.createElement("button");
+            /* Open in OpenCompare button */
 
-        button2.class = "waves-effect waves-light btn";
-        button2.style = "margin-top: 10px";
-        button2.id = index.toString();
-        button2.setAttribute("data-type", 'OpenCompareButton');
+            var button2 = document.createElement("button");
 
-        button2.addEventListener('click', function(event) {
+            button2.class = "waves-effect waves-light btn";
+            button2.style = "margin-top: 10px";
+            button2.id = index.toString();
+            button2.setAttribute("data-type", 'OpenCompareButton');
 
-            id = event.target.getAttribute("id");
-            openTable(event.target.getAttribute("id"));
-        });
-        var buttonOpen = document.createTextNode("Open in OpenCompare.org");
-        button2.appendChild(buttonOpen);
-        var parentDiv = tables[index].parentNode;
-        parentDiv.insertBefore(button2, tables[index]);
+            button2.addEventListener('click', function(event) {
 
-    }
+                id = event.target.getAttribute("id");
+                openTable(event.target.getAttribute("id"));
+            });
+            var buttonOpen = document.createTextNode("Open in OpenCompare.org");
+            button2.appendChild(buttonOpen);
+            var parentDiv = tables[index].parentNode;
+            parentDiv.insertBefore(button2, tables[index]);
+
+        }
+
+        buttonsAdded = true;
+    });
+
+
 
     function sendTable(id) {
-
-        console.log("sending table");
-
         var table = tables[id];
 
         // Create form
@@ -99,7 +106,6 @@ var ocServer = "localhost:9000";
         form.submit();
 
         table.parentNode.removeChild(form);
-
     }
 
     function openTable(id) {
@@ -111,7 +117,7 @@ var ocServer = "localhost:9000";
         fd.append('title', 'Test');
         fd.append('productAsLines', true);
         var req = new XMLHttpRequest();
-        req.open("POST", "http://opencompare.org/api/embedFromHtml");
+        req.open("POST", "http://opencompare.org/api/embedFromHtml"); // FIXME : not working anymore
         req.send(fd);
 
         req.onreadystatechange=function(){
@@ -130,6 +136,11 @@ var ocServer = "localhost:9000";
             button.parentNode.removeChild(button);
         }
 
+        buttonsAdded = false;
+    });
+
+    self.port.on("getStatus", function() {
+       self.port.emit("status", buttonsAdded);
     });
 
 

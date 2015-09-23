@@ -4,7 +4,8 @@
     var data = require("sdk/self").data;
     var panels = require("sdk/panel");
     var tabs = require("sdk/tabs");
-    var worker;
+
+    var workers = {};
 
     var button = require("sdk/ui/button/toggle").ToggleButton({
         id: "opencompare-extension",
@@ -19,8 +20,24 @@
         onHide: handleHide
     });
 
+    panel.port.on("checkPage", function() {
+        var worker = workers[tabs.activeTab.id];
+        worker.port.emit("addButtons");
+    });
+
+
+    panel.port.on("removeButtons", function() {
+        var worker = workers[tabs.activeTab.id];
+        worker.port.emit("removeButtons");
+    });
+
     function handleChange(state) {
         if (state.checked) {
+            // Get status of content script
+            var worker = workers[tabs.activeTab.id];
+            worker.port.emit("getStatus");
+
+            // Display panel
             panel.show({
                 position: button
             });
@@ -32,19 +49,24 @@
         button.state('window', {checked: false});
     }
 
-    panel.port.on("checkPage", function() {
-         worker = tabs.activeTab.attach({
+    tabs.on("ready", function(tab) {
+        var worker = tab.attach({
             contentScriptFile: [data.url('findTables.js')]
         });
 
+        workers[tab.id] = worker;
+
         worker.port.on("openTable", function(id) {
-            tabs.open('http://opencompare.org/pcm/' + id + '?deleteAfterLoaded=true', '_blank');
+            tabs.open('http://opencompare.org/pcm/' + id + '?deleteAfterLoaded=true', '_blank'); // FIXME : not working anymore
+        });
+
+        worker.port.on("status", function(status) {
+            panel.port.emit("status", status);
         });
     });
 
-    panel.port.on("removeButtons", function() {
-        worker.port.emit("removeButtons");
-    });
+
+
 
 
 })();
