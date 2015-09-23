@@ -60,7 +60,7 @@
         var inputTitle = document.createElement("input");
         inputTitle.type = "hidden";
         inputTitle.name = "title";
-        inputTitle.value = "test";
+        inputTitle.value = document.title;
 
         var inputProductAsLines = document.createElement("input");
         inputProductAsLines.type = "hidden";
@@ -72,11 +72,17 @@
         inputContent.name = "content";
         inputContent.value = table.outerHTML;
 
+        var inputSource = document.createElement("input");
+        inputSource.type = "hidden";
+        inputSource.name = "source";
+        inputSource.value = document.URL;
+
         // Add form to page
         table.parentNode.appendChild(form);
         form.appendChild(inputTitle);
         form.appendChild(inputProductAsLines);
         form.appendChild(inputContent);
+        form.appendChild(inputSource);
 
         return form;
     }
