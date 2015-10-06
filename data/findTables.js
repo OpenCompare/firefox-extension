@@ -19,7 +19,7 @@
 
             button.addEventListener('click', function(event) {
 
-                id = event.target.getAttribute("id");
+                var id = event.target.getAttribute("id");
                 document.getElementById(id).style.display = 'none';
                 sendTable(event.target.getAttribute("id"));
             });
@@ -38,8 +38,7 @@
             button2.setAttribute("data-type", 'OpenCompareButton');
 
             button2.addEventListener('click', function(event) {
-
-                id = event.target.getAttribute("id");
+                var id = event.target.getAttribute("id");
                 openTable(event.target.getAttribute("id"));
             });
             var buttonOpen = document.createTextNode("Open in OpenCompare.org");
@@ -94,7 +93,7 @@
         // Create form
         var form = createForm(table);
         form.target = "ocIframe";
-        form.action = "http://" + ocServer + "/api/import/html?format='embed'";
+        form.action = "https://" + ocServer + "/api/import/html?format='embed'";
 
         // Create iframe
         var ocIframe = document.createElement("iframe");
@@ -124,7 +123,7 @@
         var table = tables[id];
         var form = createForm(table);
         form.target = "_blank";
-        form.action = "http://" + ocServer + "/api/import/html?format='page'";
+        form.action = "https://" + ocServer + "/api/import/html?format='page'";
         form.submit();
         table.parentNode.removeChild(form);
     }

@@ -42,11 +42,8 @@
             // Get status of content script
             var tabData = tabsData[tabs.activeTab.id];
             if (typeof tabData !== 'undefined') {
-                var isHttps = (tabs.activeTab.url.indexOf("https") > -1);
-
                 panel.port.emit("status", {
-                    enabled: tabData.isEnabled,
-                    https: isHttps
+                    enabled: tabData.isEnabled
                 });
             }
 
